@@ -1,0 +1,43 @@
+{
+  "name": "uiw-mdx-editor",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/typography": "^0.5.13",
+    "@uiw/react-markdown-editor": "^6.1.1",
+    "axios": "^1.7.2",
+    "contentlayer": "^0.3.4",
+    "date-fns": "^3.6.0",
+    "fs": "^0.0.1-security",
+    "github-slugger": "^2.0.0",
+    "next": "14.2.3",
+    "next-contentlayer": "^0.3.4",
+    "preact": "^10.22.0",
+    "preline": "^2.3.0",
+    "react": "^18",
+    "react-css-in-js": "^4.0.3",
+    "react-dom": "^18",
+    "reading-time": "^1.5.0",
+    "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.13.2",
+    "rehype-react": "^8.0.0",
+    "rehype-slug": "^6.0.0",
+    "rehype-stringify": "^10.0.0",
+    "remark-gfm": "^3.0.1",
+    "shiki": "^1.6.1",
+    "unist-util-visit": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8",
+    "eslint-config-next": "14.2.3",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
