@@ -1,4 +1,4 @@
-// File: src/components/tiptap-templates/simple/theme-toggle.tsx
+"use client"
 import React from "react";
 
 export const ThemeToggle = () => {
