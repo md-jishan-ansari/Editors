@@ -1,4 +1,5 @@
-import Editor from "@/components/Editor";
+import SmallTiptapEditor from "@/components/SmallTiptapEditor";
+import Editor from "@/components/TiptapEditor";
 import { ThemeToggle } from "@/components/tiptap-templates/simple/theme-toggle";
 import Image from "next/image";
 
@@ -7,6 +8,7 @@ export default function Home() {
     <div>
       <ThemeToggle />
       <Editor />
+      <SmallTiptapEditor />
     </div>
   );
 }
