@@ -31,9 +31,20 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from './ui/popover';
-import { Bold as BoldIcon, Underline as UnderlineIcon, Code2 as CodeIcon, List as BulletListIcon, ListOrdered as OrderedListIcon, Link as LinkIcon, Image as ImageIcon, Video as VideoIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, Highlighter } from 'lucide-react';
-
-import { RxFontSize } from "react-icons/rx";
+import BoldIcon from '../icons/BoldIcon';
+import UnderlineIcon from '../icons/UnderlineIcon';
+import Highlighter from '../icons/Highlighter';
+import CodeIcon from '../icons/CodeIcon';
+import BulletListIcon from '../icons/BulletListIcon';
+import OrderedListIcon from '../icons/OrderedListIcon';
+import LinkIcon from '../icons/LinkIcon';
+import ImageIcon from '../icons/ImageIcon';
+import VideoIcon from '../icons/VideoIcon';
+import AlignLeft from '../icons/AlignLeft';
+import AlignCenter from '../icons/AlignCenter';
+import AlignRight from '../icons/AlignRight';
+import AlignJustify from '../icons/AlignJustify';
+import FontSizeIcon from '../icons/FontSizeIcon';
 
 const fontSizes = [
   { name: '10px', value: '10px' },
@@ -172,7 +183,7 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
         >
           <SelectTrigger className="w-[56px] h-9 flex items-center justify-center px-2 py-1 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <span className="flex items-center justify-center w-full">
-              <RxFontSize size={18} />
+              <FontSizeIcon size={26} />
             </span>
           </SelectTrigger>
           <SelectContent>

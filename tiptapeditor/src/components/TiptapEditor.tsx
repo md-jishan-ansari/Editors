@@ -29,8 +29,38 @@ import Typography from "@tiptap/extension-typography";
 // Video extension (custom or from @tiptap/extension-video if available)
 import Youtube from '@tiptap/extension-youtube';
 import Highlight from '@tiptap/extension-highlight';
-import { Upload, PaintBucket, Type as TextColorIcon, ALargeSmall  } from 'lucide-react';
-import { Bold as BoldIcon, Italic as ItalicIcon, Underline as UnderlineIcon, Strikethrough as StrikeIcon, Code2 as CodeIcon, List as BulletListIcon, ListOrdered as OrderedListIcon, ListTodo as TaskListIcon, Quote as BlockquoteIcon, Link as LinkIcon, Image as ImageIcon, Table as TableIcon, Undo2 as UndoIcon, Redo2 as RedoIcon, AlignLeft, AlignCenter, AlignRight, AlignJustify, Highlighter, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Video as VideoIcon, Subscript as SubscriptIcon, Superscript as SuperscriptIcon } from 'lucide-react';
+
+import BoldIcon from '../icons/BoldIcon';
+import ItalicIcon from '../icons/ItalicIcon';
+import UnderlineIcon from '../icons/UnderlineIcon';
+import StrikeIcon from '../icons/StrikeIcon';
+import CodeIcon from '../icons/CodeIcon';
+import BulletListIcon from '../icons/BulletListIcon';
+import OrderedListIcon from '../icons/OrderedListIcon';
+import TaskListIcon from '../icons/TaskListIcon';
+import BlockquoteIcon from '../icons/BlockquoteIcon';
+import LinkIcon from '../icons/LinkIcon';
+import ImageIcon from '../icons/ImageIcon';
+import TableIcon from '../icons/TableIcon';
+import UndoIcon from '../icons/UndoIcon';
+import RedoIcon from '../icons/RedoIcon';
+import AlignLeft from '../icons/AlignLeft';
+import AlignCenter from '../icons/AlignCenter';
+import AlignRight from '../icons/AlignRight';
+import AlignJustify from '../icons/AlignJustify';
+import Highlighter from '../icons/Highlighter';
+import Heading1 from '../icons/Heading1';
+import Heading2 from '../icons/Heading2';
+import Heading3 from '../icons/Heading3';
+import Heading4 from '../icons/Heading4';
+import Heading5 from '../icons/Heading5';
+import Heading6 from '../icons/Heading6';
+import VideoIcon from '../icons/VideoIcon';
+import SubscriptIcon from '../icons/SubscriptIcon';
+import SuperscriptIcon from '../icons/SuperscriptIcon';
+import PaintBucket from '../icons/PaintBucket';
+import TextColorIcon from '../icons/TextColorIcon';
+
 import { TextStyle } from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
 import FontSize from '@tiptap/extension-font-size';
@@ -178,22 +208,6 @@ const MenuBar = ({ editor }: { editor: any }) => {
     setLinkPopoverOpen(false);
     setLinkUrl('');
   }, [editor]);
-
-  // List style handlers
-  const handleUnorderedListStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (editor.isActive('bulletList')) {
-      editor.chain().focus().updateAttributes('bulletList', { listStyleType: e.target.value }).run();
-    } else {
-      window.alert('Please place the cursor inside an unordered list to change its style.');
-    }
-  };
-  const handleOrderedListStyleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (editor.isActive('orderedList')) {
-      editor.chain().focus().updateAttributes('orderedList', { listStyleType: e.target.value }).run();
-    } else {
-      window.alert('Please place the cursor inside an ordered list to change its style.');
-    }
-  };
 
   if (!editor) return null;
 
