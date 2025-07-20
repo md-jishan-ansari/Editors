@@ -81,6 +81,7 @@ import {
   PopoverTrigger,
   PopoverContent,
 } from './ui/popover';
+import styles from './TiptapEditor.module.css';
 
 
 const fontSizes = [
@@ -212,305 +213,305 @@ const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) return null;
 
   return (
-    <>
-      <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 rounded-t-md px-2 py-2 flex flex-wrap gap-2 items-center">
-        {/* Headings Dropdown */}
-        <Select
-          onValueChange={val => {
-            if (val === 'paragraph') {
-              editor.chain().focus().setParagraph().run();
-            } else {
-              editor.chain().focus().toggleHeading({ level: Number(val) }).run();
-            }
-          }}
-          value={(() => {
-            const activeHeading = headingOptions.find(opt => editor.isActive('heading', { level: opt.level }));
-            return activeHeading ? activeHeading.level.toString() : 'paragraph';
-          })()}
-        >
-          <SelectTrigger className="w-[120px]">
-            <SelectValue placeholder="Paragraph" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Heading</SelectLabel>
-              <SelectItem value="paragraph">Paragraph</SelectItem>
-              {headingOptions.map(opt => (
-                <SelectItem key={opt.level} value={opt.level.toString()}>{`H${opt.level}`}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {/* Font Size Dropdown */}
-        <Select
-          onValueChange={val => editor.chain().focus().setFontSize(val).run()}
-          value={editor.getAttributes('fontSize').fontSize || ''}
-        >
-          <SelectTrigger className="w-[110px]">
-            <SelectValue placeholder="Font Size" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Font Size</SelectLabel>
-              {fontSizes.map(f => (
-                <SelectItem key={f.value} value={f.value}>{f.name}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {/* Font Family Dropdown */}
-        <Select
-          onValueChange={val => editor.chain().focus().setFontFamily(val).run()}
-          value={editor.getAttributes('fontFamily').fontFamily || ''}
-        >
-          <SelectTrigger className="w-[140px]">
-            <SelectValue placeholder="Font Family" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Font Family</SelectLabel>
-              {fontFamilies.map(f => (
-                <SelectItem key={f.value} value={f.value}>
-                  <span style={{ fontFamily: f.value }}>{f.name}</span>
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        {/* Font styles */}
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className={`px-2 py-1 rounded ${editor.isActive("bold") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><BoldIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`px-2 py-1 rounded ${editor.isActive("italic") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><ItalicIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`px-2 py-1 rounded ${editor.isActive("underline") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><UnderlineIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().toggleStrike().run()} className={`px-2 py-1 rounded ${editor.isActive("strike") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><StrikeIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={`px-2 py-1 rounded ${editor.isActive("highlight") ? "bg-yellow-200 dark:bg-yellow-700" : ""}`} type="button"><Highlighter size={18} /></button>
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`px-2 py-1 rounded ${editor.isActive("codeBlock") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><CodeIcon size={18} /></button>
-        {/* Lists */}
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`px-2 py-1 rounded ${editor.isActive("bulletList") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><BulletListIcon size={18} /></button>
-        {/* Unordered List Style Dropdown */}
-        <Select
-          onValueChange={val => {
-            if (editor.isActive('bulletList')) {
-              editor.chain().focus().updateAttributes('bulletList', { listStyleType: val }).run();
-            } else {
-              window.alert('Please place the cursor inside an unordered list to change its style.');
-            }
-          }}
-          value={editor.getAttributes('bulletList').listStyleType || 'disc'}
-        >
-          <SelectTrigger className="w-[90px]">
-            <SelectValue placeholder="UL Style" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Unordered List</SelectLabel>
-              {unorderedListStyles.map(opt => (
-                <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`px-2 py-1 rounded ${editor.isActive("orderedList") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><OrderedListIcon size={18} /></button>
-        {/* Ordered List Style Dropdown */}
-        <Select
-          onValueChange={val => {
-            if (editor.isActive('orderedList')) {
-              editor.chain().focus().updateAttributes('orderedList', { listStyleType: val }).run();
-            } else {
-              window.alert('Please place the cursor inside an ordered list to change its style.');
-            }
-          }}
-          value={editor.getAttributes('orderedList').listStyleType || 'decimal'}
-        >
-          <SelectTrigger className="w-[110px]">
-            <SelectValue placeholder="OL Style" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Ordered List</SelectLabel>
-              {orderedListStyles.map(opt => (
-                <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-        <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={`px-2 py-1 rounded ${editor.isActive("taskList") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><TaskListIcon size={18} /></button>
-        {/* Blockquote, hr */}
-        <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`px-2 py-1 rounded ${editor.isActive("blockquote") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><BlockquoteIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().setHorizontalRule().run()} className="px-2 py-1 rounded" type="button">HR</button>
-        {/* Table */}
-        <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className="px-2 py-1 rounded" type="button"><TableIcon size={18} /></button>
-        {/* Link Popover */}
-        <Popover open={linkPopoverOpen} onOpenChange={setLinkPopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => {
-              setLinkPopoverOpen((open) => !open);
-              setLinkUrl(editor.getAttributes('link').href || '');
-            }} className={`px-2 py-1 rounded ${editor.isActive("link") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><LinkIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-80">
-            <div className="mb-2 font-semibold text-base">Insert Link</div>
-            <input
-              type="text"
-              placeholder="Paste link URL here..."
-              value={linkUrl}
-              onChange={e => setLinkUrl(e.target.value)}
-              className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
-              autoFocus
-            />
-            <div className="flex gap-2">
-              <button
-                className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition"
-                onClick={handleLinkInsert}
-                disabled={!linkUrl}
-              >
-                Insert
-              </button>
-              <button
-                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-1.5 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition"
-                onClick={handleLinkUnset}
-                disabled={!editor.isActive('link')}
-              >
-                Remove
-              </button>
-            </div>
-          </PopoverContent>
-        </Popover>
-        {/* Image Popover */}
-        <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => setImagePopoverOpen((open) => !open)} className="px-2 py-1 rounded" type="button"><ImageIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-80">
-            <div className="mb-2 font-semibold text-base">Insert Image</div>
-            <input
-              type="text"
-              placeholder="Paste image URL here..."
-              value={imageUrl}
-              onChange={e => setImageUrl(e.target.value)}
-              className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-              autoFocus
-            />
-            <div className="flex gap-2 mb-2">
-              <input
-                type="text"
-                placeholder="Width (e.g. 400 or 50%)"
-                value={imageWidth}
-                onChange={e => setImageWidth(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                placeholder="Height (e.g. 300 or 50%)"
-                value={imageHeight}
-                onChange={e => setImageHeight(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
-            <button
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition w-full"
-              onClick={handleImageUrlInsert}
-              disabled={!imageUrl}
-            >
-              Insert Image
-            </button>
-          </PopoverContent>
-        </Popover>
-        {/* Video Popover */}
-        <Popover open={videoPopoverOpen} onOpenChange={setVideoPopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => setVideoPopoverOpen((open) => !open)} className="px-2 py-1 rounded" type="button"><VideoIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-80">
-            <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
-            <input
-              type="text"
-              placeholder="Paste YouTube video URL here..."
-              value={videoUrl}
-              onChange={e => setVideoUrl(e.target.value)}
-              className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
-              autoFocus
-            />
-            <div className="flex gap-2 mb-2">
-              <input
-                type="text"
-                placeholder="Width (e.g. 400 or 50%)"
-                value={videoWidth}
-                onChange={e => setVideoWidth(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              <input
-                type="text"
-                placeholder="Height (e.g. 300 or 50%)"
-                value={videoHeight}
-                onChange={e => setVideoHeight(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
-            <button
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition w-full"
-              onClick={handleVideoUrlInsert}
-              disabled={!videoUrl}
-            >
-              Insert Video
-            </button>
-          </PopoverContent>
-        </Popover>
-        {/* Alignment */}
-        <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={`px-2 py-1 rounded ${editor.isActive({ textAlign: "left" }) ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><AlignLeft size={18} /></button>
-        <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={`px-2 py-1 rounded ${editor.isActive({ textAlign: "center" }) ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><AlignCenter size={18} /></button>
-        <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={`px-2 py-1 rounded ${editor.isActive({ textAlign: "right" }) ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><AlignRight size={18} /></button>
-        <button onClick={() => editor.chain().focus().setTextAlign("justify").run()} className={`px-2 py-1 rounded ${editor.isActive({ textAlign: "justify" }) ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><AlignJustify size={18} /></button>
-        {/* Text Color Picker */}
-        <div className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5" style={{height: 28}} title="Text Color">
-          <TextColorIcon size={16} />
+    <div className={styles.toolbar}>
+      {/* Headings Dropdown */}
+      <Select
+        onValueChange={val => {
+          if (val === 'paragraph') {
+            editor.chain().focus().setParagraph().run();
+          } else {
+            editor.chain().focus().toggleHeading({ level: Number(val) }).run();
+          }
+        }}
+        value={(() => {
+          const activeHeading = headingOptions.find(opt => editor.isActive('heading', { level: opt.level }));
+          return activeHeading ? activeHeading.level.toString() : 'paragraph';
+        })()}
+      >
+        <SelectTrigger className={`${styles.selectTrigger} ${styles.w120}`}>
+          <SelectValue placeholder="Paragraph" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Heading</SelectLabel>
+            <SelectItem value="paragraph">Paragraph</SelectItem>
+            {headingOptions.map(opt => (
+              <SelectItem key={opt.level} value={opt.level.toString()}>{`H${opt.level}`}</SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {/* Font Size Dropdown */}
+      <Select
+        onValueChange={val => editor.chain().focus().setFontSize(val).run()}
+        value={editor.getAttributes('fontSize').fontSize || ''}
+      >
+        <SelectTrigger className={`${styles.selectTrigger} ${styles.w110}`}>
+          <SelectValue placeholder="Font Size" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Font Size</SelectLabel>
+            {fontSizes.map(f => (
+              <SelectItem key={f.value} value={f.value}>{f.name}</SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {/* Font Family Dropdown */}
+      <Select
+        onValueChange={val => editor.chain().focus().setFontFamily(val).run()}
+        value={editor.getAttributes('fontFamily').fontFamily || ''}
+      >
+        <SelectTrigger className={`${styles.selectTrigger} ${styles.w140}`}>
+          <SelectValue placeholder="Font Family" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Font Family</SelectLabel>
+            {fontFamilies.map(f => (
+              <SelectItem key={f.value} value={f.value}>
+                <span style={{ fontFamily: f.value }}>{f.name}</span>
+              </SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      {/* Font styles */}
+      <button onClick={() => editor.chain().focus().toggleBold().run()} className={`${styles.button} ${editor.isActive("bold") ? styles.buttonActive : ''}`} type="button"><BoldIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`${styles.button} ${editor.isActive("italic") ? styles.buttonActive : ''}`} type="button"><ItalicIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`${styles.button} ${editor.isActive("underline") ? styles.buttonActive : ''}`} type="button"><UnderlineIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleStrike().run()} className={`${styles.button} ${editor.isActive("strike") ? styles.buttonActive : ''}`} type="button"><StrikeIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={`${styles.button} ${editor.isActive("highlight") ? styles.buttonActive : ''}`} type="button"><Highlighter size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`${styles.button} ${editor.isActive("codeBlock") ? styles.buttonActive : ''}`} type="button"><CodeIcon size={18} /></button>
+      {/* Lists */}
+      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`${styles.button} ${editor.isActive("bulletList") ? styles.buttonActive : ''}`} type="button"><BulletListIcon size={18} /></button>
+      {/* Unordered List Style Dropdown */}
+      <Select
+        onValueChange={val => {
+          if (editor.isActive('bulletList')) {
+            editor.chain().focus().updateAttributes('bulletList', { listStyleType: val }).run();
+          } else {
+            window.alert('Please place the cursor inside an unordered list to change its style.');
+          }
+        }}
+        value={editor.getAttributes('bulletList').listStyleType || 'disc'}
+      >
+        <SelectTrigger className={`${styles.selectTrigger} ${styles.w90}`}>
+          <SelectValue placeholder="UL Style" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Unordered List</SelectLabel>
+            {unorderedListStyles.map(opt => (
+              <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`${styles.button} ${editor.isActive("orderedList") ? styles.buttonActive : ''}`} type="button"><OrderedListIcon size={18} /></button>
+      {/* Ordered List Style Dropdown */}
+      <Select
+        onValueChange={val => {
+          if (editor.isActive('orderedList')) {
+            editor.chain().focus().updateAttributes('orderedList', { listStyleType: val }).run();
+          } else {
+            window.alert('Please place the cursor inside an ordered list to change its style.');
+          }
+        }}
+        value={editor.getAttributes('orderedList').listStyleType || 'decimal'}
+      >
+        <SelectTrigger className={`${styles.selectTrigger} ${styles.w110}`}>
+          <SelectValue placeholder="OL Style" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectGroup>
+            <SelectLabel>Ordered List</SelectLabel>
+            {orderedListStyles.map(opt => (
+              <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
+            ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={`${styles.button} ${editor.isActive("taskList") ? styles.buttonActive : ''}`} type="button"><TaskListIcon size={18} /></button>
+      {/* Blockquote, hr */}
+      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`${styles.button} ${editor.isActive("blockquote") ? styles.buttonActive : ''}`} type="button"><BlockquoteIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().setHorizontalRule().run()} className={styles.button} type="button">HR</button>
+      {/* Table */}
+      <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className={styles.button} type="button"><TableIcon size={18} /></button>
+      {/* Link Popover */}
+      <Popover open={linkPopoverOpen} onOpenChange={setLinkPopoverOpen}>
+        <PopoverTrigger asChild>
+          <button onClick={() => {
+            setLinkPopoverOpen((open) => !open);
+            setLinkUrl(editor.getAttributes('link').href || '');
+          }} className={`${styles.button} ${editor.isActive("link") ? styles.buttonActive : ''}`} type="button"><LinkIcon size={18} /></button>
+        </PopoverTrigger>
+        <PopoverContent align="center" sideOffset={8} className="w-80">
+          <div className="mb-2 font-semibold text-base">Insert Link</div>
           <input
-            type="color"
-            value={editor.getAttributes('textStyle').color || '#000000'}
-            onChange={e => {
-              editor.commands.focus();
-              editor.commands.setColor(e.target.value);
-            }}
-            style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+            type="text"
+            placeholder="Paste link URL here..."
+            value={linkUrl}
+            onChange={e => setLinkUrl(e.target.value)}
+            className={styles.input}
+            autoFocus
           />
-        </div>
-        {/* Background Color Picker */}
-        <div className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5" style={{height: 28}} title="Background Color">
-          <PaintBucket size={16} />
+          <div className={styles.flexRow}>
+            <button
+              className={styles.primaryBtn}
+              onClick={handleLinkInsert}
+              disabled={!linkUrl}
+            >
+              Insert
+            </button>
+            <button
+              className={styles.secondaryBtn}
+              onClick={handleLinkUnset}
+              disabled={!editor.isActive('link')}
+            >
+              Remove
+            </button>
+          </div>
+        </PopoverContent>
+      </Popover>
+      {/* Image Popover */}
+      <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
+        <PopoverTrigger asChild>
+          <button onClick={() => setImagePopoverOpen((open) => !open)} className={styles.button} type="button"><ImageIcon size={18} /></button>
+        </PopoverTrigger>
+        <PopoverContent align="center" sideOffset={8} className="w-80">
+          <div className="mb-2 font-semibold text-base">Insert Image</div>
           <input
-            type="color"
-            value={editor.getAttributes('highlight').color || '#ffff00'}
-            onChange={e => {
-              editor.commands.focus();
-              editor.commands.setHighlight({ color: e.target.value });
-            }}
-            style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+            type="text"
+            placeholder="Paste image URL here..."
+            value={imageUrl}
+            onChange={e => setImageUrl(e.target.value)}
+            className={styles.input}
+            autoFocus
           />
-        </div>
-        {/* Subscript/Superscript Buttons */}
-        <button
-          onClick={() => editor.chain().focus().toggleSubscript().run()}
-          className={`px-2 py-1 rounded ${editor.isActive('subscript') ? 'bg-blue-200 dark:bg-blue-700' : ''}`}
-          type="button"
-          title="Subscript"
-        >
-          <SubscriptIcon size={18} />
-        </button>
-        <button
-          onClick={() => editor.chain().focus().toggleSuperscript().run()}
-          className={`px-2 py-1 rounded ${editor.isActive('superscript') ? 'bg-blue-200 dark:bg-blue-700' : ''}`}
-          type="button"
-          title="Superscript"
-        >
-          <SuperscriptIcon size={18} />
-        </button>
-         {/* Undo/Redo */}
-         <div className="ml-2"></div>
-        <button onClick={() => editor.chain().focus().undo().run()} className="px-2 py-1 rounded" type="button"><UndoIcon size={18} /></button>
-        <button onClick={() => editor.chain().focus().redo().run()} className="px-2 py-1 rounded" type="button"><RedoIcon size={18} /></button>
+          <div className={styles.flexRowMb2}>
+            <input
+              type="text"
+              placeholder="Width (e.g. 400 or 50%)"
+              value={imageWidth}
+              onChange={e => setImageWidth(e.target.value)}
+              className={styles.input}
+            />
+            <input
+              type="text"
+              placeholder="Height (e.g. 300 or 50%)"
+              value={imageHeight}
+              onChange={e => setImageHeight(e.target.value)}
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+          <button
+            className={styles.primaryBtn}
+            onClick={handleImageUrlInsert}
+            disabled={!imageUrl}
+          >
+            Insert Image
+          </button>
+        </PopoverContent>
+      </Popover>
+      {/* Video Popover */}
+      <Popover open={videoPopoverOpen} onOpenChange={setVideoPopoverOpen}>
+        <PopoverTrigger asChild>
+          <button onClick={() => setVideoPopoverOpen((open) => !open)} className={styles.button} type="button"><VideoIcon size={18} /></button>
+        </PopoverTrigger>
+        <PopoverContent align="center" sideOffset={8} className="w-80">
+          <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
+          <input
+            type="text"
+            placeholder="Paste YouTube video URL here..."
+            value={videoUrl}
+            onChange={e => setVideoUrl(e.target.value)}
+            className={styles.input}
+            autoFocus
+          />
+          <div className={styles.flexRowMb2}>
+            <input
+              type="text"
+              placeholder="Width (e.g. 400 or 50%)"
+              value={videoWidth}
+              onChange={e => setVideoWidth(e.target.value)}
+              className={styles.input}
+            />
+            <input
+              type="text"
+              placeholder="Height (e.g. 300 or 50%)"
+              value={videoHeight}
+              onChange={e => setVideoHeight(e.target.value)}
+              className={styles.input}
+            />
+          </div>
+          <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+          <button
+            className={styles.primaryBtn}
+            onClick={handleVideoUrlInsert}
+            disabled={!videoUrl}
+          >
+            Insert Video
+          </button>
+        </PopoverContent>
+      </Popover>
+      {/* Alignment */}
+      <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={`${styles.button} ${editor.isActive({ textAlign: "left" }) ? styles.buttonActive : ''}`} type="button"><AlignLeft size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={`${styles.button} ${editor.isActive({ textAlign: "center" }) ? styles.buttonActive : ''}`} type="button"><AlignCenter size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={`${styles.button} ${editor.isActive({ textAlign: "right" }) ? styles.buttonActive : ''}`} type="button"><AlignRight size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("justify").run()} className={`${styles.button} ${editor.isActive({ textAlign: "justify" }) ? styles.buttonActive : ''}`} type="button"><AlignJustify size={18} /></button>
+      {/* Text Color Picker */}
+      <div className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5" style={{height: 28}} title="Text Color">
+        <TextColorIcon size={16} />
+        <input
+          type="color"
+          value={editor.getAttributes('textStyle').color || '#000000'}
+          onChange={e => {
+            editor.commands.focus();
+            editor.commands.setColor(e.target.value);
+          }}
+          style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+          className={styles.colorInput}
+        />
       </div>
-    </>
+      {/* Background Color Picker */}
+      <div className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5" style={{height: 28}} title="Background Color">
+        <PaintBucket size={16} />
+        <input
+          type="color"
+          value={editor.getAttributes('highlight').color || '#ffff00'}
+          onChange={e => {
+            editor.commands.focus();
+            editor.commands.setHighlight({ color: e.target.value });
+          }}
+          style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
+          className={styles.colorInput}
+        />
+      </div>
+      {/* Subscript/Superscript Buttons */}
+      <button
+        onClick={() => editor.chain().focus().toggleSubscript().run()}
+        className={`${styles.button} ${editor.isActive('subscript') ? styles.buttonActive : ''}`}
+        type="button"
+        title="Subscript"
+      >
+        <SubscriptIcon size={18} />
+      </button>
+      <button
+        onClick={() => editor.chain().focus().toggleSuperscript().run()}
+        className={`${styles.button} ${editor.isActive('superscript') ? styles.buttonActive : ''}`}
+        type="button"
+        title="Superscript"
+      >
+        <SuperscriptIcon size={18} />
+      </button>
+       {/* Undo/Redo */}
+       <div className={styles.ml2}></div>
+      <button onClick={() => editor.chain().focus().undo().run()} className={styles.button} type="button"><UndoIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().redo().run()} className={styles.button} type="button"><RedoIcon size={18} /></button>
+    </div>
   );
 };
 
@@ -590,9 +591,9 @@ const TiptapEditor = ({ content = '', onChange }: TiptapEditorProps) => {
 
   return (
 
-      <div className="rounded-md border border-gray-200 dark:border-gray-700">
+      <div className={styles.roundedMdBorder}>
         <MenuBar editor={editor} />
-        <div className="overflow-auto max-h-[calc(100vh-250px)]">
+        <div className={styles.overflowAuto}>
           <EditorContent editor={editor} />
         </div>
       </div>

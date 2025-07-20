@@ -45,6 +45,7 @@ import AlignCenter from '../icons/AlignCenter';
 import AlignRight from '../icons/AlignRight';
 import AlignJustify from '../icons/AlignJustify';
 import FontSizeIcon from '../icons/FontSizeIcon';
+import styles from './SmallTiptapEditor.module.css';
 
 const fontSizes = [
   { name: '10px', value: '10px' },
@@ -175,14 +176,14 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
 
   return (
     <>
-      <div className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 rounded-t-md px-2 py-2 flex flex-wrap gap-2 items-center">
+      <div className={styles.toolbar}>
         {/* Font Size Dropdown */}
         <Select
           onValueChange={val => editor.chain().focus().setFontSize(val).run()}
           value={editor.getAttributes('fontSize').fontSize || ''}
         >
-          <SelectTrigger className="w-[56px] h-9 flex items-center justify-center px-2 py-1 rounded bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <span className="flex items-center justify-center w-full">
+          <SelectTrigger className={`${styles.selectTrigger} ${styles.w56}`}>
+            <span className={styles.selectTriggerSpan}>
               <FontSizeIcon size={26} />
             </span>
           </SelectTrigger>
@@ -196,24 +197,24 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
           </SelectContent>
         </Select>
         {/* Bold */}
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className={`px-2 py-1 rounded ${editor.isActive("bold") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><BoldIcon size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleBold().run()} className={`${styles.button} ${editor.isActive("bold") ? styles.buttonActive : ''}`} type="button"><BoldIcon size={18} /></button>
         {/* Underline */}
-        <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`px-2 py-1 rounded ${editor.isActive("underline") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><UnderlineIcon size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`${styles.button} ${editor.isActive("underline") ? styles.buttonActive : ''}`} type="button"><UnderlineIcon size={18} /></button>
         {/* Highlighter (single color) */}
-        <button onClick={() => editor.chain().focus().toggleHighlight({ color: '#fff59d' }).run()} className={`px-2 py-1 rounded ${editor.isActive("highlight") ? "bg-yellow-200 dark:bg-yellow-700" : ""}`} type="button"><Highlighter size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleHighlight({ color: '#fff59d' }).run()} className={`${styles.button} ${editor.isActive("highlight") ? styles.buttonActive : ''}`} type="button"><Highlighter size={18} /></button>
         {/* Code block */}
-        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`px-2 py-1 rounded ${editor.isActive("codeBlock") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><CodeIcon size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`${styles.button} ${editor.isActive("codeBlock") ? styles.buttonActive : ''}`} type="button"><CodeIcon size={18} /></button>
         {/* Unordered List */}
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`px-2 py-1 rounded ${editor.isActive("bulletList") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><BulletListIcon size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`${styles.button} ${editor.isActive("bulletList") ? styles.buttonActive : ''}`} type="button"><BulletListIcon size={18} /></button>
         {/* Ordered List */}
-        <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`px-2 py-1 rounded ${editor.isActive("orderedList") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><OrderedListIcon size={18} /></button>
+        <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`${styles.button} ${editor.isActive("orderedList") ? styles.buttonActive : ''}`} type="button"><OrderedListIcon size={18} /></button>
         {/* Link Popover */}
         <Popover open={linkPopoverOpen} onOpenChange={setLinkPopoverOpen}>
           <PopoverTrigger asChild>
             <button onClick={() => {
               setLinkPopoverOpen((open) => !open);
               setLinkUrl(editor.getAttributes('link').href || '');
-            }} className={`px-2 py-1 rounded ${editor.isActive("link") ? "bg-blue-200 dark:bg-blue-700" : ""}`} type="button"><LinkIcon size={18} /></button>
+            }} className={`${styles.button} ${editor.isActive("link") ? styles.buttonActive : ''}`} type="button"><LinkIcon size={18} /></button>
           </PopoverTrigger>
           <PopoverContent align="center" sideOffset={8} className="w-80">
             <div className="mb-2 font-semibold text-base">Insert Link</div>
@@ -222,19 +223,19 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
               placeholder="Paste link URL here..."
               value={linkUrl}
               onChange={e => setLinkUrl(e.target.value)}
-              className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-3"
+              className={styles.input}
               autoFocus
             />
-            <div className="flex gap-2">
+            <div className={styles.flexRow}>
               <button
-                className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition"
+                className={styles.primaryBtn}
                 onClick={handleLinkInsert}
                 disabled={!linkUrl}
               >
                 Insert
               </button>
               <button
-                className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-1.5 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                className={styles.secondaryBtn}
                 onClick={handleLinkUnset}
                 disabled={!editor.isActive('link')}
               >
@@ -246,12 +247,12 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
         {/* Image Popover */}
         <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
           <PopoverTrigger asChild>
-            <button onClick={() => setImagePopoverOpen((open) => !open)} className="px-2 py-1 rounded" type="button"><ImageIcon size={18} /></button>
+            <button onClick={() => setImagePopoverOpen((open) => !open)} className={styles.button} type="button"><ImageIcon size={18} /></button>
           </PopoverTrigger>
           <PopoverContent align="center" sideOffset={8} className="w-96">
             <div className="mb-2 font-semibold text-base flex gap-4 border-b pb-2">
-              <button className={`px-2 py-1 rounded ${imageTab === 'url' ? 'bg-blue-100 dark:bg-blue-900' : ''}`} onClick={() => setImageTab('url')}>URL</button>
-              <button className={`px-2 py-1 rounded ${imageTab === 'upload' ? 'bg-blue-100 dark:bg-blue-900' : ''}`} onClick={() => setImageTab('upload')}>Upload</button>
+              <button className={`${styles.button} ${imageTab === 'url' ? styles.buttonActive : ''}`} onClick={() => setImageTab('url')}>URL</button>
+              <button className={`${styles.button} ${imageTab === 'upload' ? styles.buttonActive : ''}`} onClick={() => setImageTab('upload')}>Upload</button>
             </div>
             {imageTab === 'url' && (
               <>
@@ -260,28 +261,28 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
                   placeholder="Paste image URL here..."
                   value={imageUrl}
                   onChange={e => setImageUrl(e.target.value)}
-                  className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+                  className={styles.input}
                   autoFocus
                 />
-                <div className="flex gap-2 mb-2">
+                <div className={styles.flexRowMb2}>
                   <input
                     type="text"
                     placeholder="Width (e.g. 400 or 50%)"
                     value={imageWidth}
                     onChange={e => setImageWidth(e.target.value)}
-                    className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={styles.input}
                   />
                   <input
                     type="text"
                     placeholder="Height (e.g. 300 or 50%)"
                     value={imageHeight}
                     onChange={e => setImageHeight(e.target.value)}
-                    className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className={styles.input}
                   />
                 </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+                <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
                 <button
-                  className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition w-full"
+                  className={styles.primaryBtn}
                   onClick={handleImageUrlInsert}
                   disabled={!imageUrl}
                 >
@@ -297,7 +298,7 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
                       type="file"
                       accept="image/*"
                       onChange={handleUploadInputChange}
-                      className="mb-2"
+                      className={styles.mb2}
                       disabled={uploading}
                     />
                     {uploading && <div className="text-sm text-blue-600 mb-2">Uploading...</div>}
@@ -309,31 +310,31 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
                     <div className="mb-2 flex flex-col items-center">
                       <img src={uploadedImageUrl} alt="Preview" className="max-h-40 max-w-full rounded border mb-2" />
                     </div>
-                    <div className="flex gap-2 mb-2">
+                    <div className={styles.flexRowMb2}>
                       <input
                         type="text"
                         placeholder="Width (e.g. 400 or 50%)"
                         value={imageWidth}
                         onChange={e => setImageWidth(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={styles.input}
                       />
                       <input
                         type="text"
                         placeholder="Height (e.g. 300 or 50%)"
                         value={imageHeight}
                         onChange={e => setImageHeight(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        className={styles.input}
                       />
                     </div>
-                    <div className="flex gap-2">
+                    <div className={styles.flexRow}>
                       <button
-                        className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition w-full"
+                        className={styles.primaryBtn}
                         onClick={handleUploadedImageInsert}
                       >
                         Add
                       </button>
                       <button
-                        className="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-1.5 rounded-lg font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition w-full"
+                        className={styles.secondaryBtn}
                         onClick={() => {
                           setUploadedImageUrl('');
                           setImageFile(null);
@@ -354,7 +355,7 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
         {/* Video Popover */}
         <Popover open={videoPopoverOpen} onOpenChange={setVideoPopoverOpen}>
           <PopoverTrigger asChild>
-            <button onClick={() => setVideoPopoverOpen((open) => !open)} className="px-2 py-1 rounded" type="button"><VideoIcon size={18} /></button>
+            <button onClick={() => setVideoPopoverOpen((open) => !open)} className={styles.button} type="button"><VideoIcon size={18} /></button>
           </PopoverTrigger>
           <PopoverContent align="center" sideOffset={8} className="w-80">
             <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
@@ -363,28 +364,28 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
               placeholder="Paste YouTube video URL here..."
               value={videoUrl}
               onChange={e => setVideoUrl(e.target.value)}
-              className="border border-gray-300 dark:border-gray-700 rounded px-3 py-2 w-full text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-2"
+              className={styles.input}
               autoFocus
             />
-            <div className="flex gap-2 mb-2">
+            <div className={styles.flexRowMb2}>
               <input
                 type="text"
                 placeholder="Width (e.g. 400 or 50%)"
                 value={videoWidth}
                 onChange={e => setVideoWidth(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.input}
               />
               <input
                 type="text"
                 placeholder="Height (e.g. 300 or 50%)"
                 value={videoHeight}
                 onChange={e => setVideoHeight(e.target.value)}
-                className="border border-gray-300 dark:border-gray-700 rounded px-2 py-1 w-1/2 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={styles.input}
               />
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 mb-2">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+            <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
             <button
-              className="bg-blue-600 text-white px-4 py-1.5 rounded-lg font-medium hover:bg-blue-700 transition w-full"
+              className={styles.primaryBtn}
               onClick={handleVideoUrlInsert}
               disabled={!videoUrl}
             >
@@ -397,8 +398,8 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
           onValueChange={val => editor.chain().focus().setTextAlign(val).run()}
           value={editor.getAttributes('textAlign') || 'left'}
         >
-          <SelectTrigger className="w-[56px] h-9 flex items-center justify-center">
-            <span className="flex items-center justify-center w-full">
+          <SelectTrigger className={`${styles.selectTrigger} ${styles.w56}`}>
+            <span className={styles.selectTriggerSpan}>
               {(() => {
                 switch (editor.getAttributes('textAlign') || 'left') {
                   case 'center': return <AlignCenter size={18} />;
@@ -483,9 +484,9 @@ const SmallTiptapEditor  = ({ content = '', onChange, imageUploadUrl, placeholde
   }, [content]);
 
   return (
-      <div className="rounded-md border border-gray-200 dark:border-gray-700">
+      <div className={styles.roundedMdBorder}>
         <MenuBar editor={editor} imageUploadUrl={imageUploadUrl} />
-        <div className="overflow-auto max-h-[300px]">
+        <div className={styles.overflowAuto}>
           <EditorContent editor={editor} />
         </div>
       </div>
