@@ -17,20 +17,8 @@ import { OrderedList } from "@tiptap/extension-ordered-list";
 import { TextStyle } from '@tiptap/extension-text-style';
 import FontSize from '@tiptap/extension-font-size';
 import Placeholder from '@tiptap/extension-placeholder';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from './ui/popover';
+import CustomSelect from './ui/CustomSelect';
+import CustomPopover from './ui/CustomPopover';
 import BoldIcon from '../icons/BoldIcon';
 import UnderlineIcon from '../icons/UnderlineIcon';
 import Highlighter from '../icons/Highlighter';
@@ -78,6 +66,9 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
   const [videoHeight, setVideoHeight] = useState('');
   const [linkPopoverOpen, setLinkPopoverOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
+  const linkButtonRef = React.useRef<HTMLButtonElement>(null);
+  const imageButtonRef = React.useRef<HTMLButtonElement>(null);
+  const videoButtonRef = React.useRef<HTMLButtonElement>(null);
 
   // Helper for image by URL
   const handleImageUrlInsert = useCallback(() => {
@@ -178,24 +169,13 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
     <>
       <div className={styles.toolbar}>
         {/* Font Size Dropdown */}
-        <Select
-          onValueChange={val => editor.chain().focus().setFontSize(val).run()}
+        <CustomSelect
           value={editor.getAttributes('fontSize').fontSize || ''}
-        >
-          <SelectTrigger className={`${styles.selectTrigger} ${styles.w56}`}>
-            <span className={styles.selectTriggerSpan}>
-              <FontSizeIcon size={26} />
-            </span>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Font Size</SelectLabel>
-              {fontSizes.map(f => (
-                <SelectItem key={f.value} value={f.value}>{f.name}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          options={fontSizes.map(f => ({ value: f.value, label: f.name }))}
+          onChange={val => editor.chain().focus().setFontSize(val).run()}
+          className={styles.select}
+          placeholder="Font Size"
+        />
         {/* Bold */}
         <button onClick={() => editor.chain().focus().toggleBold().run()} className={`${styles.button} ${editor.isActive("bold") ? styles.buttonActive : ''}`} type="button"><BoldIcon size={18} /></button>
         {/* Underline */}
@@ -209,14 +189,23 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
         {/* Ordered List */}
         <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`${styles.button} ${editor.isActive("orderedList") ? styles.buttonActive : ''}`} type="button"><OrderedListIcon size={18} /></button>
         {/* Link Popover */}
-        <Popover open={linkPopoverOpen} onOpenChange={setLinkPopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => {
+        <>
+          <button
+            ref={linkButtonRef}
+            onClick={() => {
               setLinkPopoverOpen((open) => !open);
               setLinkUrl(editor.getAttributes('link').href || '');
-            }} className={`${styles.button} ${editor.isActive("link") ? styles.buttonActive : ''}`} type="button"><LinkIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-80">
+            }}
+            className={`${styles.button} ${editor.isActive("link") ? styles.buttonActive : ''}`}
+            type="button"
+          >
+            <LinkIcon size={18} />
+          </button>
+          <CustomPopover
+            open={linkPopoverOpen}
+            onOpenChange={setLinkPopoverOpen}
+            anchorEl={linkButtonRef.current}
+          >
             <div className="mb-2 font-semibold text-base">Insert Link</div>
             <input
               type="text"
@@ -242,14 +231,23 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
                 Remove
               </button>
             </div>
-          </PopoverContent>
-        </Popover>
+          </CustomPopover>
+        </>
         {/* Image Popover */}
-        <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => setImagePopoverOpen((open) => !open)} className={styles.button} type="button"><ImageIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-96">
+        <>
+          <button
+            ref={imageButtonRef}
+            onClick={() => setImagePopoverOpen((open) => !open)}
+            className={styles.button}
+            type="button"
+          >
+            <ImageIcon size={18} />
+          </button>
+          <CustomPopover
+            open={imagePopoverOpen}
+            onOpenChange={setImagePopoverOpen}
+            anchorEl={imageButtonRef.current}
+          >
             <div className="mb-2 font-semibold text-base flex gap-4 border-b pb-2">
               <button className={`${styles.button} ${imageTab === 'url' ? styles.buttonActive : ''}`} onClick={() => setImageTab('url')}>URL</button>
               <button className={`${styles.button} ${imageTab === 'upload' ? styles.buttonActive : ''}`} onClick={() => setImageTab('upload')}>Upload</button>
@@ -350,14 +348,23 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
                 )}
               </>
             )}
-          </PopoverContent>
-        </Popover>
+          </CustomPopover>
+        </>
         {/* Video Popover */}
-        <Popover open={videoPopoverOpen} onOpenChange={setVideoPopoverOpen}>
-          <PopoverTrigger asChild>
-            <button onClick={() => setVideoPopoverOpen((open) => !open)} className={styles.button} type="button"><VideoIcon size={18} /></button>
-          </PopoverTrigger>
-          <PopoverContent align="center" sideOffset={8} className="w-80">
+        <>
+          <button
+            ref={videoButtonRef}
+            onClick={() => setVideoPopoverOpen((open) => !open)}
+            className={styles.button}
+            type="button"
+          >
+            <VideoIcon size={18} />
+          </button>
+          <CustomPopover
+            open={videoPopoverOpen}
+            onOpenChange={setVideoPopoverOpen}
+            anchorEl={videoButtonRef.current}
+          >
             <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
             <input
               type="text"
@@ -391,34 +398,16 @@ const MenuBar = ({ editor, imageUploadUrl }: { editor: any, imageUploadUrl?: str
             >
               Insert Video
             </button>
-          </PopoverContent>
-        </Popover>
+          </CustomPopover>
+        </>
         {/* Alignment Dropdown */}
-        <Select
-          onValueChange={val => editor.chain().focus().setTextAlign(val).run()}
+        <CustomSelect
           value={editor.getAttributes('textAlign') || 'left'}
-        >
-          <SelectTrigger className={`${styles.selectTrigger} ${styles.w56}`}>
-            <span className={styles.selectTriggerSpan}>
-              {(() => {
-                switch (editor.getAttributes('textAlign') || 'left') {
-                  case 'center': return <AlignCenter size={18} />;
-                  case 'right': return <AlignRight size={18} />;
-                  case 'justify': return <AlignJustify size={18} />;
-                  default: return <AlignLeft size={18} />;
-                }
-              })()}
-            </span>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Align</SelectLabel>
-              {alignmentOptions.map(opt => (
-                <SelectItem key={opt.value} value={opt.value}>{opt.label} {opt.name}</SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+          options={alignmentOptions.map(opt => ({ value: opt.value, label: <>{opt.label} {opt.name}</> }))}
+          onChange={val => editor.chain().focus().setTextAlign(val).run()}
+          className={styles.select}
+          placeholder="Align"
+        />
       </div>
     </>
   );

@@ -67,20 +67,8 @@ import FontSize from '@tiptap/extension-font-size';
 import Color from '@tiptap/extension-color';
 import { CustomBulletList } from './tiptap-extensions/CustomBulletList';
 import { CustomOrderedList } from './tiptap-extensions/CustomOrderedList';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from './ui/popover';
+import CustomSelect from './ui/CustomSelect';
+import CustomPopover from './ui/CustomPopover';
 import styles from './TiptapEditor.module.css';
 
 
@@ -168,6 +156,10 @@ const MenuBar = ({ editor }: { editor: any }) => {
   const [linkPopoverOpen, setLinkPopoverOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState('');
 
+  const linkButtonRef = React.useRef<HTMLButtonElement>(null);
+  const imageButtonRef = React.useRef<HTMLButtonElement>(null);
+  const videoButtonRef = React.useRef<HTMLButtonElement>(null);
+
   // Helper for image by URL
   const handleImageUrlInsert = useCallback(() => {
     if (imageUrl) {
@@ -215,68 +207,41 @@ const MenuBar = ({ editor }: { editor: any }) => {
   return (
     <div className={styles.toolbar}>
       {/* Headings Dropdown */}
-      <Select
-        onValueChange={val => {
+      <CustomSelect
+        value={(() => {
+          const activeHeading = headingOptions.find(opt => editor.isActive('heading', { level: opt.level }));
+          return activeHeading ? activeHeading.level.toString() : '';
+        })()}
+        options={[
+          { value: 'paragraph', label: 'Paragraph' },
+          ...headingOptions.map(opt => ({ value: opt.level.toString(), label: `H${opt.level}` }))
+        ]}
+        onChange={(val: string) => {
           if (val === 'paragraph') {
             editor.chain().focus().setParagraph().run();
           } else {
             editor.chain().focus().toggleHeading({ level: Number(val) }).run();
           }
         }}
-        value={(() => {
-          const activeHeading = headingOptions.find(opt => editor.isActive('heading', { level: opt.level }));
-          return activeHeading ? activeHeading.level.toString() : 'paragraph';
-        })()}
-      >
-        <SelectTrigger className={`${styles.selectTrigger} ${styles.w120}`}>
-          <SelectValue placeholder="Paragraph" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Heading</SelectLabel>
-            <SelectItem value="paragraph">Paragraph</SelectItem>
-            {headingOptions.map(opt => (
-              <SelectItem key={opt.level} value={opt.level.toString()}>{`H${opt.level}`}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        className={styles.select}
+        placeholder="Heading"
+      />
       {/* Font Size Dropdown */}
-      <Select
-        onValueChange={val => editor.chain().focus().setFontSize(val).run()}
+      <CustomSelect
         value={editor.getAttributes('fontSize').fontSize || ''}
-      >
-        <SelectTrigger className={`${styles.selectTrigger} ${styles.w110}`}>
-          <SelectValue placeholder="Font Size" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Font Size</SelectLabel>
-            {fontSizes.map(f => (
-              <SelectItem key={f.value} value={f.value}>{f.name}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        options={fontSizes.map(f => ({ value: f.value, label: f.name }))}
+        onChange={(val: string) => editor.chain().focus().setFontSize(val).run()}
+        className={styles.select}
+        placeholder="Font Size"
+      />
       {/* Font Family Dropdown */}
-      <Select
-        onValueChange={val => editor.chain().focus().setFontFamily(val).run()}
+      <CustomSelect
         value={editor.getAttributes('fontFamily').fontFamily || ''}
-      >
-        <SelectTrigger className={`${styles.selectTrigger} ${styles.w140}`}>
-          <SelectValue placeholder="Font Family" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Font Family</SelectLabel>
-            {fontFamilies.map(f => (
-              <SelectItem key={f.value} value={f.value}>
-                <span style={{ fontFamily: f.value }}>{f.name}</span>
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        options={fontFamilies.map(f => ({ value: f.value, label: f.name }))}
+        onChange={(val: string) => editor.chain().focus().setFontFamily(val).run()}
+        className={styles.select}
+        placeholder="Font Family"
+      />
       {/* Font styles */}
       <button onClick={() => editor.chain().focus().toggleBold().run()} className={`${styles.button} ${editor.isActive("bold") ? styles.buttonActive : ''}`} type="button"><BoldIcon size={18} /></button>
       <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`${styles.button} ${editor.isActive("italic") ? styles.buttonActive : ''}`} type="button"><ItalicIcon size={18} /></button>
@@ -287,52 +252,34 @@ const MenuBar = ({ editor }: { editor: any }) => {
       {/* Lists */}
       <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`${styles.button} ${editor.isActive("bulletList") ? styles.buttonActive : ''}`} type="button"><BulletListIcon size={18} /></button>
       {/* Unordered List Style Dropdown */}
-      <Select
-        onValueChange={val => {
+      <CustomSelect
+        value={editor.getAttributes('bulletList').listStyleType || ''}
+        options={unorderedListStyles.map(opt => ({ value: opt.value, label: <>{opt.icon} {opt.name}</> }))}
+        onChange={(val: string) => {
           if (editor.isActive('bulletList')) {
             editor.chain().focus().updateAttributes('bulletList', { listStyleType: val }).run();
           } else {
             window.alert('Please place the cursor inside an unordered list to change its style.');
           }
         }}
-        value={editor.getAttributes('bulletList').listStyleType || 'disc'}
-      >
-        <SelectTrigger className={`${styles.selectTrigger} ${styles.w90}`}>
-          <SelectValue placeholder="UL Style" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Unordered List</SelectLabel>
-            {unorderedListStyles.map(opt => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        className={styles.select}
+        placeholder="UL Style"
+      />
       <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`${styles.button} ${editor.isActive("orderedList") ? styles.buttonActive : ''}`} type="button"><OrderedListIcon size={18} /></button>
       {/* Ordered List Style Dropdown */}
-      <Select
-        onValueChange={val => {
+      <CustomSelect
+        value={editor.getAttributes('orderedList').listStyleType || ''}
+        options={orderedListStyles.map(opt => ({ value: opt.value, label: <>{opt.icon} {opt.name}</> }))}
+        onChange={(val: string) => {
           if (editor.isActive('orderedList')) {
             editor.chain().focus().updateAttributes('orderedList', { listStyleType: val }).run();
           } else {
             window.alert('Please place the cursor inside an ordered list to change its style.');
           }
         }}
-        value={editor.getAttributes('orderedList').listStyleType || 'decimal'}
-      >
-        <SelectTrigger className={`${styles.selectTrigger} ${styles.w110}`}>
-          <SelectValue placeholder="OL Style" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectGroup>
-            <SelectLabel>Ordered List</SelectLabel>
-            {orderedListStyles.map(opt => (
-              <SelectItem key={opt.value} value={opt.value}>{opt.icon} {opt.name}</SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        className={styles.select}
+        placeholder="OL Style"
+      />
       <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={`${styles.button} ${editor.isActive("taskList") ? styles.buttonActive : ''}`} type="button"><TaskListIcon size={18} /></button>
       {/* Blockquote, hr */}
       <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`${styles.button} ${editor.isActive("blockquote") ? styles.buttonActive : ''}`} type="button"><BlockquoteIcon size={18} /></button>
@@ -340,123 +287,117 @@ const MenuBar = ({ editor }: { editor: any }) => {
       {/* Table */}
       <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className={styles.button} type="button"><TableIcon size={18} /></button>
       {/* Link Popover */}
-      <Popover open={linkPopoverOpen} onOpenChange={setLinkPopoverOpen}>
-        <PopoverTrigger asChild>
-          <button onClick={() => {
-            setLinkPopoverOpen((open) => !open);
-            setLinkUrl(editor.getAttributes('link').href || '');
-          }} className={`${styles.button} ${editor.isActive("link") ? styles.buttonActive : ''}`} type="button"><LinkIcon size={18} /></button>
-        </PopoverTrigger>
-        <PopoverContent align="center" sideOffset={8} className="w-80">
-          <div className="mb-2 font-semibold text-base">Insert Link</div>
-          <input
-            type="text"
-            placeholder="Paste link URL here..."
-            value={linkUrl}
-            onChange={e => setLinkUrl(e.target.value)}
-            className={styles.input}
-            autoFocus
-          />
-          <div className={styles.flexRow}>
-            <button
-              className={styles.primaryBtn}
-              onClick={handleLinkInsert}
-              disabled={!linkUrl}
-            >
-              Insert
-            </button>
-            <button
-              className={styles.secondaryBtn}
-              onClick={handleLinkUnset}
-              disabled={!editor.isActive('link')}
-            >
-              Remove
-            </button>
-          </div>
-        </PopoverContent>
-      </Popover>
+      <CustomPopover
+        open={linkPopoverOpen}
+        onOpenChange={setLinkPopoverOpen}
+        anchorEl={linkButtonRef.current}
+      >
+        <div className="mb-2 font-semibold text-base">Insert Link</div>
+        <input
+          type="text"
+          placeholder="Paste link URL here..."
+          value={linkUrl}
+          onChange={e => setLinkUrl(e.target.value)}
+          className={styles.input}
+          autoFocus
+        />
+        <div className={styles.flexRow}>
+          <button
+            className={styles.primaryBtn}
+            onClick={handleLinkInsert}
+            disabled={!linkUrl}
+          >
+            Insert
+          </button>
+          <button
+            className={styles.secondaryBtn}
+            onClick={handleLinkUnset}
+            disabled={!editor.isActive('link')}
+          >
+            Remove
+          </button>
+        </div>
+      </CustomPopover>
       {/* Image Popover */}
-      <Popover open={imagePopoverOpen} onOpenChange={setImagePopoverOpen}>
-        <PopoverTrigger asChild>
-          <button onClick={() => setImagePopoverOpen((open) => !open)} className={styles.button} type="button"><ImageIcon size={18} /></button>
-        </PopoverTrigger>
-        <PopoverContent align="center" sideOffset={8} className="w-80">
-          <div className="mb-2 font-semibold text-base">Insert Image</div>
+      <CustomPopover
+        open={imagePopoverOpen}
+        onOpenChange={setImagePopoverOpen}
+        anchorEl={imageButtonRef.current}
+      >
+        <div className="mb-2 font-semibold text-base">Insert Image</div>
+        <input
+          type="text"
+          placeholder="Paste image URL here..."
+          value={imageUrl}
+          onChange={e => setImageUrl(e.target.value)}
+          className={styles.input}
+          autoFocus
+        />
+        <div className={styles.flexRowMb2}>
           <input
             type="text"
-            placeholder="Paste image URL here..."
-            value={imageUrl}
-            onChange={e => setImageUrl(e.target.value)}
+            placeholder="Width (e.g. 400 or 50%)"
+            value={imageWidth}
+            onChange={e => setImageWidth(e.target.value)}
             className={styles.input}
-            autoFocus
           />
-          <div className={styles.flexRowMb2}>
-            <input
-              type="text"
-              placeholder="Width (e.g. 400 or 50%)"
-              value={imageWidth}
-              onChange={e => setImageWidth(e.target.value)}
-              className={styles.input}
-            />
-            <input
-              type="text"
-              placeholder="Height (e.g. 300 or 50%)"
-              value={imageHeight}
-              onChange={e => setImageHeight(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
-          <button
-            className={styles.primaryBtn}
-            onClick={handleImageUrlInsert}
-            disabled={!imageUrl}
-          >
-            Insert Image
-          </button>
-        </PopoverContent>
-      </Popover>
+          <input
+            type="text"
+            placeholder="Height (e.g. 300 or 50%)"
+            value={imageHeight}
+            onChange={e => setImageHeight(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+        <button
+          className={styles.primaryBtn}
+          onClick={handleImageUrlInsert}
+          disabled={!imageUrl}
+        >
+          Insert Image
+        </button>
+      </CustomPopover>
       {/* Video Popover */}
-      <Popover open={videoPopoverOpen} onOpenChange={setVideoPopoverOpen}>
-        <PopoverTrigger asChild>
-          <button onClick={() => setVideoPopoverOpen((open) => !open)} className={styles.button} type="button"><VideoIcon size={18} /></button>
-        </PopoverTrigger>
-        <PopoverContent align="center" sideOffset={8} className="w-80">
-          <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
+      <CustomPopover
+        open={videoPopoverOpen}
+        onOpenChange={setVideoPopoverOpen}
+        anchorEl={videoButtonRef.current}
+      >
+        <div className="mb-2 font-semibold text-base">Insert YouTube Video</div>
+        <input
+          type="text"
+          placeholder="Paste YouTube video URL here..."
+          value={videoUrl}
+          onChange={e => setVideoUrl(e.target.value)}
+          className={styles.input}
+          autoFocus
+        />
+        <div className={styles.flexRowMb2}>
           <input
             type="text"
-            placeholder="Paste YouTube video URL here..."
-            value={videoUrl}
-            onChange={e => setVideoUrl(e.target.value)}
+            placeholder="Width (e.g. 400 or 50%)"
+            value={videoWidth}
+            onChange={e => setVideoWidth(e.target.value)}
             className={styles.input}
-            autoFocus
           />
-          <div className={styles.flexRowMb2}>
-            <input
-              type="text"
-              placeholder="Width (e.g. 400 or 50%)"
-              value={videoWidth}
-              onChange={e => setVideoWidth(e.target.value)}
-              className={styles.input}
-            />
-            <input
-              type="text"
-              placeholder="Height (e.g. 300 or 50%)"
-              value={videoHeight}
-              onChange={e => setVideoHeight(e.target.value)}
-              className={styles.input}
-            />
-          </div>
-          <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
-          <button
-            className={styles.primaryBtn}
-            onClick={handleVideoUrlInsert}
-            disabled={!videoUrl}
-          >
-            Insert Video
-          </button>
-        </PopoverContent>
-      </Popover>
+          <input
+            type="text"
+            placeholder="Height (e.g. 300 or 50%)"
+            value={videoHeight}
+            onChange={e => setVideoHeight(e.target.value)}
+            className={styles.input}
+          />
+        </div>
+        <div className={styles.textXs}>Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+        <button
+          className={styles.primaryBtn}
+          onClick={handleVideoUrlInsert}
+          disabled={!videoUrl}
+        >
+          Insert Video
+        </button>
+      </CustomPopover>
       {/* Alignment */}
       <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={`${styles.button} ${editor.isActive({ textAlign: "left" }) ? styles.buttonActive : ''}`} type="button"><AlignLeft size={18} /></button>
       <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={`${styles.button} ${editor.isActive({ textAlign: "center" }) ? styles.buttonActive : ''}`} type="button"><AlignCenter size={18} /></button>
