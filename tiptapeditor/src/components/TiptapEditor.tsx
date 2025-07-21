@@ -69,7 +69,7 @@ import { CustomBulletList } from './tiptap-extensions/CustomBulletList';
 import { CustomOrderedList } from './tiptap-extensions/CustomOrderedList';
 import CustomSelect from './ui/CustomSelect';
 import CustomPopover from './ui/CustomPopover';
-import './TiptapEditor.css';
+import './RicherEditor.css';
 
 
 const fontSizes = [
@@ -205,7 +205,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
   if (!editor) return null;
 
   return (
-    <div className="toolbar global-toolbar">
+    <div className="richer-editor-toolbar global-toolbar">
       {/* Headings Dropdown */}
       <CustomSelect
         value={(() => {
@@ -223,7 +223,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
             editor.chain().focus().toggleHeading({ level: Number(val) }).run();
           }
         }}
-        className="select"
+        className="richer-editor-select"
         placeholder="Heading"
       />
       {/* Font Size Dropdown */}
@@ -231,7 +231,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
         value={editor.getAttributes('fontSize').fontSize || ''}
         options={fontSizes.map(f => ({ value: f.value, label: f.name }))}
         onChange={(val: string) => editor.chain().focus().setFontSize(val).run()}
-        className="select"
+        className="richer-editor-select"
         placeholder="Font Size"
       />
       {/* Font Family Dropdown */}
@@ -239,18 +239,18 @@ const MenuBar = ({ editor }: { editor: any }) => {
         value={editor.getAttributes('fontFamily').fontFamily || ''}
         options={fontFamilies.map(f => ({ value: f.value, label: f.name }))}
         onChange={(val: string) => editor.chain().focus().setFontFamily(val).run()}
-        className="select"
+        className="richer-editor-select"
         placeholder="Font Family"
       />
       {/* Font styles */}
-      <button onClick={() => editor.chain().focus().toggleBold().run()} className={`button ${editor.isActive("bold") ? "buttonActive" : ''}`} type="button"><BoldIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`button ${editor.isActive("italic") ? "buttonActive" : ''}`} type="button"><ItalicIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`button ${editor.isActive("underline") ? "buttonActive" : ''}`} type="button"><UnderlineIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().toggleStrike().run()} className={`button ${editor.isActive("strike") ? "buttonActive" : ''}`} type="button"><StrikeIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={`button ${editor.isActive("highlight") ? "buttonActive" : ''}`} type="button"><Highlighter size={18} /></button>
-      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`button ${editor.isActive("codeBlock") ? "buttonActive" : ''}`} type="button"><CodeIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleBold().run()} className={`richer-editor-button ${editor.isActive("bold") ? "richer-editor-buttonActive" : ''}`} type="button"><BoldIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleItalic().run()} className={`richer-editor-button ${editor.isActive("italic") ? "richer-editor-buttonActive" : ''}`} type="button"><ItalicIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleUnderline().run()} className={`richer-editor-button ${editor.isActive("underline") ? "richer-editor-buttonActive" : ''}`} type="button"><UnderlineIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleStrike().run()} className={`richer-editor-button ${editor.isActive("strike") ? "richer-editor-buttonActive" : ''}`} type="button"><StrikeIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleHighlight().run()} className={`richer-editor-button ${editor.isActive("highlight") ? "richer-editor-buttonActive" : ''}`} type="button"><Highlighter size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleCodeBlock().run()} className={`richer-editor-button ${editor.isActive("codeBlock") ? "richer-editor-buttonActive" : ''}`} type="button"><CodeIcon size={18} /></button>
       {/* Lists */}
-      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`button ${editor.isActive("bulletList") ? "buttonActive" : ''}`} type="button"><BulletListIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={`richer-editor-button ${editor.isActive("bulletList") ? "richer-editor-buttonActive" : ''}`} type="button"><BulletListIcon size={18} /></button>
       {/* Unordered List Style Dropdown */}
       <CustomSelect
         value={editor.getAttributes('bulletList').listStyleType || ''}
@@ -262,10 +262,10 @@ const MenuBar = ({ editor }: { editor: any }) => {
             window.alert('Please place the cursor inside an unordered list to change its style.');
           }
         }}
-        className="select"
+        className="richer-editor-select"
         placeholder="UL Style"
       />
-      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`button ${editor.isActive("orderedList") ? "buttonActive" : ''}`} type="button"><OrderedListIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleOrderedList().run()} className={`richer-editor-button ${editor.isActive("orderedList") ? "richer-editor-buttonActive" : ''}`} type="button"><OrderedListIcon size={18} /></button>
       {/* Ordered List Style Dropdown */}
       <CustomSelect
         value={editor.getAttributes('orderedList').listStyleType || ''}
@@ -277,15 +277,15 @@ const MenuBar = ({ editor }: { editor: any }) => {
             window.alert('Please place the cursor inside an ordered list to change its style.');
           }
         }}
-        className="select"
+        className="richer-editor-select"
         placeholder="OL Style"
       />
-      <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={`button ${editor.isActive("taskList") ? "buttonActive" : ''}`} type="button"><TaskListIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().toggleTaskList().run()} className={`richer-editor-button ${editor.isActive("taskList") ? "richer-editor-buttonActive" : ''}`} type="button"><TaskListIcon size={18} /></button>
       {/* Blockquote, hr */}
-      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`button ${editor.isActive("blockquote") ? "buttonActive" : ''}`} type="button"><BlockquoteIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()} className="button" type="button">HR</button>
+      <button onClick={() => editor.chain().focus().toggleBlockquote().run()} className={`richer-editor-button ${editor.isActive("blockquote") ? "richer-editor-buttonActive" : ''}`} type="button"><BlockquoteIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().setHorizontalRule().run()} className="richer-editor-button" type="button">HR</button>
       {/* Table */}
-      <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className="button" type="button"><TableIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()} className="richer-editor-button" type="button"><TableIcon size={18} /></button>
       {/* Link Popover */}
       <CustomPopover
         open={linkPopoverOpen}
@@ -298,19 +298,19 @@ const MenuBar = ({ editor }: { editor: any }) => {
           placeholder="Paste link URL here..."
           value={linkUrl}
           onChange={e => setLinkUrl(e.target.value)}
-          className="input"
+          className="richer-editor-input"
           autoFocus
         />
-        <div className="flexRow">
+        <div className="richer-editor-flexRow">
           <button
-            className="primaryBtn"
+            className="richer-editor-primaryBtn"
             onClick={handleLinkInsert}
             disabled={!linkUrl}
           >
             Insert
           </button>
           <button
-            className="secondaryBtn"
+            className="richer-editor-secondaryBtn"
             onClick={handleLinkUnset}
             disabled={!editor.isActive('link')}
           >
@@ -330,28 +330,28 @@ const MenuBar = ({ editor }: { editor: any }) => {
           placeholder="Paste image URL here..."
           value={imageUrl}
           onChange={e => setImageUrl(e.target.value)}
-          className="input"
+          className="richer-editor-input"
           autoFocus
         />
-        <div className="flexRowMb2">
+        <div className="richer-editor-flexRowMb2">
           <input
             type="text"
             placeholder="Width (e.g. 400 or 50%)"
             value={imageWidth}
             onChange={e => setImageWidth(e.target.value)}
-            className="input"
+            className="richer-editor-input"
           />
           <input
             type="text"
             placeholder="Height (e.g. 300 or 50%)"
             value={imageHeight}
             onChange={e => setImageHeight(e.target.value)}
-            className="input"
+            className="richer-editor-input"
           />
         </div>
-        <div className="textXs">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+        <div className="richer-editor-textXs">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
         <button
-          className="primaryBtn"
+          className="richer-editor-primaryBtn"
           onClick={handleImageUrlInsert}
           disabled={!imageUrl}
         >
@@ -370,28 +370,28 @@ const MenuBar = ({ editor }: { editor: any }) => {
           placeholder="Paste YouTube video URL here..."
           value={videoUrl}
           onChange={e => setVideoUrl(e.target.value)}
-          className="input"
+          className="richer-editor-input"
           autoFocus
         />
-        <div className="flexRowMb2">
+        <div className="richer-editor-flexRowMb2">
           <input
             type="text"
             placeholder="Width (e.g. 400 or 50%)"
             value={videoWidth}
             onChange={e => setVideoWidth(e.target.value)}
-            className="input"
+            className="richer-editor-input"
           />
           <input
             type="text"
             placeholder="Height (e.g. 300 or 50%)"
             value={videoHeight}
             onChange={e => setVideoHeight(e.target.value)}
-            className="input"
+            className="richer-editor-input"
           />
         </div>
-        <div className="textXs">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
+        <div className="richer-editor-textXs">Leave blank for default size. Use px (e.g. 400) or % (e.g. 50%).</div>
         <button
-          className="primaryBtn"
+          className="richer-editor-primaryBtn"
           onClick={handleVideoUrlInsert}
           disabled={!videoUrl}
         >
@@ -399,10 +399,10 @@ const MenuBar = ({ editor }: { editor: any }) => {
         </button>
       </CustomPopover>
       {/* Alignment */}
-      <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={`button ${editor.isActive({ textAlign: "left" }) ? "buttonActive" : ''}`} type="button"><AlignLeft size={18} /></button>
-      <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={`button ${editor.isActive({ textAlign: "center" }) ? "buttonActive" : ''}`} type="button"><AlignCenter size={18} /></button>
-      <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={`button ${editor.isActive({ textAlign: "right" }) ? "buttonActive" : ''}`} type="button"><AlignRight size={18} /></button>
-      <button onClick={() => editor.chain().focus().setTextAlign("justify").run()} className={`button ${editor.isActive({ textAlign: "justify" }) ? "buttonActive" : ''}`} type="button"><AlignJustify size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("left").run()} className={`richer-editor-button ${editor.isActive({ textAlign: "left" }) ? "richer-editor-buttonActive" : ''}`} type="button"><AlignLeft size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("center").run()} className={`richer-editor-button ${editor.isActive({ textAlign: "center" }) ? "richer-editor-buttonActive" : ''}`} type="button"><AlignCenter size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("right").run()} className={`richer-editor-button ${editor.isActive({ textAlign: "right" }) ? "richer-editor-buttonActive" : ''}`} type="button"><AlignRight size={18} /></button>
+      <button onClick={() => editor.chain().focus().setTextAlign("justify").run()} className={`richer-editor-button ${editor.isActive({ textAlign: "justify" }) ? "richer-editor-buttonActive" : ''}`} type="button"><AlignJustify size={18} /></button>
       {/* Text Color Picker */}
       <div className="flex items-center gap-1 border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5" style={{height: 28}} title="Text Color">
         <TextColorIcon size={16} />
@@ -414,7 +414,7 @@ const MenuBar = ({ editor }: { editor: any }) => {
             editor.commands.setColor(e.target.value);
           }}
           style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
-          className="colorInput"
+          className="richer-editor-colorInput"
         />
       </div>
       {/* Background Color Picker */}
@@ -428,13 +428,13 @@ const MenuBar = ({ editor }: { editor: any }) => {
             editor.commands.setHighlight({ color: e.target.value });
           }}
           style={{ width: 20, height: 20, border: 'none', background: 'none', cursor: 'pointer', padding: 0 }}
-          className="colorInput"
+          className="richer-editor-colorInput"
         />
       </div>
       {/* Subscript/Superscript Buttons */}
       <button
         onClick={() => editor.chain().focus().toggleSubscript().run()}
-        className={`button ${editor.isActive('subscript') ? 'buttonActive' : ''}`}
+        className={`richer-editor-button ${editor.isActive('subscript') ? 'richer-editor-buttonActive' : ''}`}
         type="button"
         title="Subscript"
       >
@@ -442,16 +442,16 @@ const MenuBar = ({ editor }: { editor: any }) => {
       </button>
       <button
         onClick={() => editor.chain().focus().toggleSuperscript().run()}
-        className={`button ${editor.isActive('superscript') ? 'buttonActive' : ''}`}
+        className={`richer-editor-button ${editor.isActive('superscript') ? 'richer-editor-buttonActive' : ''}`}
         type="button"
         title="Superscript"
       >
         <SuperscriptIcon size={18} />
       </button>
        {/* Undo/Redo */}
-       <div className="ml2"></div>
-      <button onClick={() => editor.chain().focus().undo().run()} className="button" type="button"><UndoIcon size={18} /></button>
-      <button onClick={() => editor.chain().focus().redo().run()} className="button" type="button"><RedoIcon size={18} /></button>
+       <div className="richer-editor-ml2"></div>
+      <button onClick={() => editor.chain().focus().undo().run()} className="richer-editor-button" type="button"><UndoIcon size={18} /></button>
+      <button onClick={() => editor.chain().focus().redo().run()} className="richer-editor-button" type="button"><RedoIcon size={18} /></button>
     </div>
   );
 };
@@ -532,9 +532,9 @@ const TiptapEditor = ({ content = '', onChange }: TiptapEditorProps) => {
 
   return (
 
-      <div className="roundedMdBorder">
+      <div className="richer-editor-roundedMdBorder">
         <MenuBar editor={editor} />
-        <div className="overflowAuto">
+        <div className="richer-editor-overflowAuto">
           <EditorContent editor={editor} />
         </div>
       </div>
