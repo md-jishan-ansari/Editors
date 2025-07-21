@@ -76,3 +76,21 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Editor dark mode fix for CSS Modules */
+.dark .global-toolbar {
+  background: #111827 !important;
+  color: #f3f4f6 !important;
+}
+
+/* Optionally, for selects and popovers if needed: */
+.dark .global-editor-select {
+  background: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}
+.dark .global-editor-popover {
+  background: #1f2937 !important;
+  color: #f3f4f6 !important;
+  border-color: #374151 !important;
+}

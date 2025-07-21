@@ -95,3 +95,48 @@
   background: #e6f7ff;
   color: #2563eb;
 }
+.dark .selectWrapper {
+  /* No background, but ensure children are themed */
+}
+.dark .label {
+  color: #e5e7eb;
+}
+.dark .trigger {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1.5px solid #374151;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.24);
+}
+.dark .trigger:focus, .dark .trigger:active {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 2px #2563eb33;
+}
+.dark .trigger:hover {
+  border-color: #60a5fa;
+}
+.dark .placeholder {
+  color: #9ca3af;
+}
+.dark .chevron {
+  color: #9ca3af;
+}
+.dark .trigger[aria-expanded="true"] .chevron {
+  color: #60a5fa;
+}
+.dark .options {
+  background: #111827;
+  border: 1.5px solid #374151;
+  box-shadow: 0 6px 32px rgba(0,0,0,0.33);
+}
+.dark .option {
+  color: #f3f4f6;
+  background: none;
+}
+.dark .option:hover, .dark .option:focus, .dark .option.highlighted {
+  background: #1e293b;
+  color: #60a5fa;
+}
+.dark .selected {
+  background: #1e40af;
+  color: #f3f4f6;
+}

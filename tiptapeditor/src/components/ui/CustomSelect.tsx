@@ -1,6 +1,6 @@
 // File: src/components/ui/CustomSelect.tsx
 import React, { useState, useRef, useEffect } from 'react';
-import styles from './CustomSelect.module.css';
+import './CustomSelect.css';
 
 interface Option {
   value: string;
@@ -68,30 +68,30 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
   const selectedOption = options.find(o => o.value === value);
 
   return (
-    <div className={`${styles.selectWrapper} ${className || ''}`}
+    <div className={`selectWrapper className`}
       tabIndex={0}
       onBlur={e => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
       }}
     >
-      {label && <div className={styles.label}>{label}</div>}
+      {label && <div className="label">{label}</div>}
       <button
         ref={triggerRef}
-        className={styles.trigger}
+        className="trigger"
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen(o => !o)}
         onKeyDown={handleKeyDown}
         type="button"
       >
-        <span className={selectedOption ? undefined : styles.placeholder}>
+        <span className={selectedOption ? undefined : "placeholder"}>
           {selectedOption ? selectedOption.label : placeholder || 'Select...'}
         </span>
-        <span className={styles.chevron} aria-hidden>▼</span>
+        <span className="chevron" aria-hidden>▼</span>
       </button>
       {open && (
         <ul
-          className={styles.options}
+          className="options"
           ref={listRef}
           role="listbox"
           tabIndex={-1}
@@ -100,7 +100,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
             <li
               key={opt.value}
               className={
-                `${styles.option} ${value === opt.value ? styles.selected : ''} ${highlighted === idx ? styles.highlighted : ''}`
+                `option ${value === opt.value ? "selected" : ''} ${highlighted === idx ? "highlighted" : ''}`
               }
               role="option"
               aria-selected={value === opt.value}

@@ -1,4 +1,5 @@
 // File: src/icons/ItalicIcon.tsx
+// Icon color is controlled by parent (inherits 'currentColor'). For dark mode, ensure parent sets color to white or near-white.
 import React from 'react';
 
 const ItalicIcon = ({ size = 24, color = 'currentColor', className = '', ...props }) => (

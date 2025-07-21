@@ -1,4 +1,5 @@
 // File: src/icons/ImageIcon.tsx
+// Icon color is controlled by parent (inherits 'currentColor'). For dark mode, ensure parent sets color to white or near-white.
 import React from 'react';
 
 const ImageIcon = ({ size = 24, color = 'currentColor', className = '', ...props }) => (

@@ -1,7 +1,7 @@
 // File: src/components/ui/CustomPopover.tsx
 import React, { useRef, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import styles from './CustomPopover.module.css';
+import './CustomPopover.css';
 
 interface CustomPopoverProps {
   open: boolean;
@@ -39,11 +39,11 @@ const CustomPopover: React.FC<CustomPopoverProps> = ({ open, onOpenChange, ancho
     };
   }, [open, onOpenChange, anchorEl]);
 
-  if (!open) return null;
+  if (!open || !anchorEl) return null;
   return ReactDOM.createPortal(
     <div
       ref={popoverRef}
-      className={`${styles.popover} ${className || ''}`}
+      className={`popover ${className || ''}`}
       style={{ top: position.top, left: position.left, position: 'absolute', zIndex: 1000 }}
       tabIndex={-1}
       role="dialog"

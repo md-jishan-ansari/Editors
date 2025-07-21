@@ -1,4 +1,4 @@
-/* File: src/components/TiptapEditor.module.css */
+/* File: src/components/SmallTiptapEditor.module.css */
 
 .toolbar {
   background: #f9fafb;
@@ -15,32 +15,43 @@
   border-bottom: 1px solid #374151;
 }
 
+.dark-toolbar {
+  color: #f3f4f6;
+  background: #111827 !important;
+}
+
 .selectTrigger {
   border-radius: 0.375rem;
   border: 1px solid #e5e7eb;
   background: #fff;
   padding: 0.25rem 0.5rem;
   min-height: 2.25rem;
-  /* width is now controlled by utility classes below */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .dark .selectTrigger {
   background: #1f2937;
   border: 1px solid #374151;
+  color: #f3f4f6;
 }
 
 /* Utility width classes for dropdowns */
-.w90 { width: 90px; }
+.w56 { width: 56px; }
 .w110 { width: 110px; }
-.w120 { width: 120px; }
 .w140 { width: 140px; }
 
 /* Usage:
-  - Heading: styles.selectTrigger + styles.w120
-  - Font Size: styles.selectTrigger + styles.w110
-  - Font Family: styles.selectTrigger + styles.w140
-  - UL Style: styles.selectTrigger + styles.w90
-  - OL Style: styles.selectTrigger + styles.w110
+  - Font Size: styles.selectTrigger + styles.w56
+  - Alignment: styles.selectTrigger + styles.w56
 */
+
+.selectTriggerSpan {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
 
 .button {
   padding: 0.25rem 0.5rem;
@@ -55,6 +66,7 @@
 }
 .dark .buttonActive {
   background: #1e40af;
+  color: #f3f4f6;
 }
 
 .input {
@@ -146,11 +158,15 @@
 }
 .dark .roundedMdBorder {
   border: 1px solid #374151;
+  background: #111827;
 }
 
 .overflowAuto {
   overflow: auto;
-  max-height: calc(100vh - 250px);
+  max-height: 300px;
+}
+.dark .overflowAuto {
+  background: #111827;
 }
 
 .ml2 {
@@ -159,4 +175,8 @@
 
 .prose {
   /* Add prose styles as needed or import from a prose.css if you want to keep typography */
+}
+.dark .prose {
+  color: #f3f4f6;
+  background: #111827;
 }

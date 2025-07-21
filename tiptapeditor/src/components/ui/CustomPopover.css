@@ -40,3 +40,19 @@
   background: #f2f7ff;
   color: #2563eb;
 }
+.dark .popover {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1.5px solid #374151;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.33);
+}
+.dark .header {
+  color: #60a5fa;
+}
+.dark .closeBtn {
+  color: #9ca3af;
+}
+.dark .closeBtn:hover, .dark .closeBtn:focus {
+  background: #1e293b;
+  color: #60a5fa;
+}

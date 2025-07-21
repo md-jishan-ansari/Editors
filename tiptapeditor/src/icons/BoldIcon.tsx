@@ -1,4 +1,5 @@
 // File: src/icons/BoldIcon.tsx
+// Icon color is controlled by parent (inherits 'currentColor'). For dark mode, ensure parent sets color to white or near-white.
 import React from "react";
 interface IconProps {
     size?: number;
