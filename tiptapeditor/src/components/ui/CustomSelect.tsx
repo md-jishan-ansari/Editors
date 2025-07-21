@@ -1,5 +1,6 @@
 // File: src/components/ui/CustomSelect.tsx
 import React, { useState, useRef, useEffect } from 'react';
+import ReactDOM from 'react-dom';
 import './CustomSelect.css';
 
 interface Option {
@@ -21,6 +22,18 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
   const [highlighted, setHighlighted] = useState<number>(-1);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const [dropdownPos, setDropdownPos] = useState<{top: number, left: number, width: number}>({top: 0, left: 0, width: 0});
+
+  useEffect(() => {
+    if (open && triggerRef.current) {
+      const rect = triggerRef.current.getBoundingClientRect();
+      setDropdownPos({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width
+      });
+    }
+  }, [open]);
 
   useEffect(() => {
     if (open && listRef.current && highlighted >= 0) {
@@ -31,6 +44,25 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
 
   useEffect(() => {
     if (!open) setHighlighted(-1);
+  }, [open]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        triggerRef.current &&
+        !triggerRef.current.contains(e.target as Node) &&
+        listRef.current &&
+        !listRef.current.contains(e.target as Node)
+      ) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [open]);
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -68,11 +100,12 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
   const selectedOption = options.find(o => o.value === value);
 
   return (
-    <div className={`selectWrapper className`}
+    <div className={`selectWrapper ${className || ''}`}
       tabIndex={0}
       onBlur={e => {
         if (!e.currentTarget.contains(e.relatedTarget as Node)) setOpen(false);
       }}
+      style={{display: 'inline-block'}}
     >
       {label && <div className="label">{label}</div>}
       <button
@@ -89,12 +122,20 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
         </span>
         <span className="chevron" aria-hidden>▼</span>
       </button>
-      {open && (
+      {open && ReactDOM.createPortal(
         <ul
           className="options"
           ref={listRef}
           role="listbox"
           tabIndex={-1}
+          style={{
+            position: 'absolute',
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            minWidth: dropdownPos.width,
+            maxWidth: 200,
+            zIndex: 2000
+          }}
         >
           {options.map((opt, idx) => (
             <li
@@ -110,7 +151,8 @@ const CustomSelect: React.FC<CustomSelectProps> = ({ value, options, onChange, c
               {opt.label}
             </li>
           ))}
-        </ul>
+        </ul>,
+        document.body
       )}
     </div>
   );

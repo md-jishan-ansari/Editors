@@ -17,8 +17,8 @@
   color: #222;
   border: 1.5px solid #bfc7d1;
   border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 0.97em;
+  padding: 3px 7px;
+  font-size: 0.93em;
   text-align: left;
   cursor: pointer;
   display: flex;
@@ -27,9 +27,9 @@
   outline: none;
   box-shadow: 0 1px 4px rgba(0,0,0,0.04);
   transition: border 0.18s, box-shadow 0.18s;
-  min-height: 32px;
-  height: 32px;
-  max-height: 32px;
+  min-height: 28px;
+  height: 28px;
+  max-height: 28px;
 }
 .trigger:focus, .trigger:active {
   border-color: #4f8cff;
@@ -68,8 +68,8 @@
   padding: 0;
   list-style: none;
   animation: fadeIn 0.18s;
-  font-size: 0.97em;
-  min-width: 140px;
+  font-size: 0.93em;
+  min-width: 100px;
   width: auto;
 }
 @keyframes fadeIn {
@@ -77,9 +77,9 @@
   to { opacity: 1; transform: translateY(0); }
 }
 .option {
-  padding: 7px 12px;
+  padding: 5px 9px;
   cursor: pointer;
-  font-size: 0.97em;
+  font-size: 0.93em;
   color: #222;
   background: none;
   border: none;
